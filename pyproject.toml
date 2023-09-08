@@ -1,0 +1,27 @@
+[project]
+name = "datasette-llm-embed"
+version = "0.1"
+description = "llm_embed(model_id, text) SQL function for Datasette"
+readme = "README.md"
+authors = [{name = "Simon Willison"}]
+license = {text = "Apache-2.0"}
+classifiers = [
+    "License :: OSI Approved :: Apache Software License",
+    "Framework :: Datasette",
+]
+dependencies = [
+    "datasette",
+    "llm"
+]
+
+[project.urls]
+Homepage = "https://github.com/simonw/datasette-llm-embed"
+Changelog = "https://github.com/simonw/datasette-llm-embed/releases"
+Issues = "https://github.com/simonw/datasette-llm-embed/issues"
+CI = "https://github.com/simonw/datasette-llm-embed/actions"
+
+[project.entry-points.datasette]
+llm_embed = "datasette_llm_embed"
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-asyncio"]
