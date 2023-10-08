@@ -1,6 +1,6 @@
 [project]
 name = "datasette-llm-embed"
-version = "0.1"
+version = "0.2"
 description = "llm_embed(model_id, text) SQL function for Datasette"
 readme = "README.md"
 authors = [{name = "Simon Willison"}]
