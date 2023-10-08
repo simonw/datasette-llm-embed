@@ -23,6 +23,15 @@ This embeds the provided text using the specified embedding model and returns a 
 
 The models need to be installed using [LLM](https://llm.datasette.io/) plugins such as [llm-sentence-transformers](https://github.com/simonw/llm-sentence-transformers).
 
+Use `llm_embed_cosine(a, b)` to calculate cosine similarity between two vector blobs:
+
+```sql
+select llm_embed_cosine(
+    llm_embed('sentence-transformers/all-mpnet-base-v2', 'This is some text'),
+    llm_embed('sentence-transformers/all-mpnet-base-v2', 'This is some other text')
+)
+```
+
 ## Development
 
 To set up this plugin locally, first checkout the code. Then create a new virtual environment:

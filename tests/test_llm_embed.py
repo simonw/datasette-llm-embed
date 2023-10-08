@@ -35,3 +35,22 @@ async def test_llm_embed():
         0,
         0,
     )
+
+
+@pytest.mark.asyncio
+async def test_llm_embed_cosine():
+    ds = Datasette()
+    await ds.invoke_startup()
+    response = await ds.client.get(
+        "/_memory.json",
+        params={
+            "_shape": "array",
+            "sql": """
+            select llm_embed_cosine(
+                llm_embed('embed-demo', 'hello world'),
+                llm_embed('embed-demo', 'hello again')
+            ) as cosine""",
+        },
+    )
+    assert response.status_code == 200
+    pytest.approx(response.json()[0]["cosine"], 0.0001) == 0.9999
