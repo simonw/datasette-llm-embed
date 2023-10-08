@@ -1,4 +1,5 @@
 from datasette import hookimpl
+import json
 import llm
 
 
@@ -25,8 +26,13 @@ def llm_embed_cosine(a, b):
         return str(e)
 
 
+def llm_embed_decode(blob):
+    return json.dumps(llm.decode(blob))
+
+
 @hookimpl
 def prepare_connection(datasette, conn):
+    conn.create_function("llm_embed_decode", 1, llm_embed_decode)
     conn.create_function("llm_embed", 2, llm_embed_factory(datasette))
     conn.create_function("llm_embed_cosine", 2, llm_embed_cosine)
     conn.create_aggregate("llm_embed_average", 1, AverageVectorAgg)

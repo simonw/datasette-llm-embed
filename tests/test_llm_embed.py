@@ -96,3 +96,38 @@ async def test_llm_embed_uses_key():
         0,
         11.0,
     )
+
+
+@pytest.mark.asyncio
+async def test_llm_embed_decode():
+    ds = Datasette()
+    response = await ds.client.get(
+        "/_memory.json",
+        params={
+            "_shape": "array",
+            "_json": "decoded",
+            "sql": """
+            select llm_embed_decode(
+                llm_embed('embed-demo', 'hello world')
+            ) as decoded""",
+        },
+    )
+    assert response.status_code == 200
+    assert response.json()[0]["decoded"] == [
+        5.0,
+        5.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+    ]

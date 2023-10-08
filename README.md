@@ -31,6 +31,15 @@ select llm_embed_cosine(
     llm_embed('sentence-transformers/all-mpnet-base-v2', 'This is some other text')
 )
 ```
+
+The `llm_embed_decode()` function can be used to decode a binary BLOB into a JSON array of floats:
+
+```sql
+select llm_embed_decode(
+    llm_embed('sentence-transformers/all-mpnet-base-v2', 'This is some text')
+)
+```
+
 ## Models that require API keys
 
 If your embedding model needs an API key - for example the `ada-002` model from OpenAI - you can configure that key in `metadata.yml` (or JSON) like this:
