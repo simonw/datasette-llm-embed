@@ -40,7 +40,6 @@ async def test_llm_embed():
 @pytest.mark.asyncio
 async def test_llm_embed_cosine():
     ds = Datasette()
-    await ds.invoke_startup()
     response = await ds.client.get(
         "/_memory.json",
         params={
@@ -54,3 +53,46 @@ async def test_llm_embed_cosine():
     )
     assert response.status_code == 200
     pytest.approx(response.json()[0]["cosine"], 0.0001) == 0.9999
+
+
+@pytest.mark.asyncio
+async def test_llm_embed_uses_key():
+    ds = Datasette(
+        metadata={
+            "plugins": {
+                "datasette-llm-embed": {
+                    "keys": {
+                        "embed-key-demo": "default-key",
+                        "aliased": "alias",
+                    }
+                }
+            }
+        }
+    )
+    response = await ds.client.get(
+        "/_memory.json",
+        params={
+            "_shape": "array",
+            "sql": "select llm_embed('embed-key-demo', 'hello world') as e",
+        },
+    )
+    assert response.status_code == 200
+    encoded = response.json()[0]["e"]["encoded"]
+    assert llm.decode(base64.b64decode(encoded)) == (
+        5.0,
+        5.0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        11.0,
+    )

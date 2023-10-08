@@ -31,6 +31,27 @@ select llm_embed_cosine(
     llm_embed('sentence-transformers/all-mpnet-base-v2', 'This is some other text')
 )
 ```
+## Models that require API keys
+
+If your embedding model needs an API key - for example the `ada-002` model from OpenAI - you can configure that key in `metadata.yml` (or JSON) like this:
+
+```yaml
+plugins:
+  datasette-llm-embed:
+    keys:
+      ada-002:
+        $env: OPENAI_API_KEY
+```
+The key here should be the full model ID of the model - not an alias.
+
+You can then set the `OPENAI_API_KEY` environment variable to the key you want to use before starting Datasette:
+```bash
+export OPENAI_API_KEY=sk-1234567890
+```
+Once configured, calls like this will use the API key that has been provided:
+```sql
+select llm_embed('ada-002', 'This is some text')
+```
 
 ## Development
 
